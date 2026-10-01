@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 const getImage = vi.hoisted(() => vi.fn());
 vi.mock('astro:assets', () => ({ getImage }));
 
-const { responsiveImage } = await import('../../src/lib/image');
+const { backdropImage, backdropWidths, responsiveImage } = await import('../../src/lib/image');
 
 const meta = (format: string) =>
   ({ src: `/_astro/foto.${format}`, width: 1200, height: 800, format }) as never;
@@ -37,5 +37,18 @@ describe('responsiveImage', () => {
       srcSet: '/a.webp 400w, /b.webp 800w',
       sizes: '50vw',
     });
+  });
+
+  test('backdropImage: dekoratif, selebar layar, kualitas diturunkan', async () => {
+    getImage.mockResolvedValue({
+      src: '/_astro/foto_2400.webp',
+      attributes: { width: 2400, height: 1600 },
+      srcSet: { attribute: '/a.webp 640w' },
+    });
+    const img = await backdropImage(meta('jpg'));
+    expect(getImage).toHaveBeenCalledWith(
+      expect.objectContaining({ widths: backdropWidths, sizes: '100vw', quality: 60 }),
+    );
+    expect(img.alt).toBe('');
   });
 });

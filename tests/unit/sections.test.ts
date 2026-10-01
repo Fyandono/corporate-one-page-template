@@ -1,13 +1,34 @@
 import { describe, expect, test } from 'vitest';
-import { mapMilestones, mapStats, mapValues } from '../../src/lib/sections/about';
+import { mapMilestones, mapStats, mapValues, photoText } from '../../src/lib/sections/about';
 import { addressLines, contactDetails, telHref } from '../../src/lib/sections/contact';
-import { groupPeople } from '../../src/lib/sections/management';
+import { heroMeta } from '../../src/lib/sections/hero';
+import { businessLayout, cardImageSpec } from '../../src/lib/sections/business';
+import { groupPeople, messageEntry } from '../../src/lib/sections/management';
 import { latestNews } from '../../src/lib/sections/news';
 import { byOrder } from '../../src/lib/sections/shared';
 
 const ls = (id: string, en = `${id} (en)`) => ({ id, en });
 
+describe('hero', () => {
+  test('heroMeta menyusun tahun berdiri dan lokasi', () => {
+    expect(heroMeta('Didirikan', 1975, 'Jakarta, Indonesia')).toEqual([
+      'Didirikan 1975',
+      'Jakarta, Indonesia',
+    ]);
+  });
+});
+
 describe('about', () => {
+  test('photoText melokalkan keterangan & alt', () => {
+    const photo = { caption: ls('Bromo', 'Mount Bromo'), alt: ls('Gunung', 'A mountain') };
+    expect(photoText(photo, 'en')).toEqual({ caption: 'Mount Bromo', alt: 'A mountain' });
+  });
+
+  test('photoText: alt jatuh ke keterangan, lalu ke string kosong (dekoratif)', () => {
+    expect(photoText({ caption: ls('Bromo') }, 'id')).toEqual({ caption: 'Bromo', alt: 'Bromo' });
+    expect(photoText({}, 'id')).toEqual({ caption: undefined, alt: '' });
+  });
+
   test('mapStats melokalkan label & suffix', () => {
     expect(mapStats([{ value: 25, suffix: ls('rb+', 'k+'), label: ls('Insan') }], 'en')).toEqual([
       { value: 25, suffix: 'k+', label: 'Insan (en)' },
@@ -47,6 +68,37 @@ describe('management', () => {
       ['Komisaris', ['K1']],
       ['Direksi', ['D1', 'D2']],
     ]);
+  });
+
+  test('messageEntry: pengisi `message` dengan order terkecil; tanpa sambutan → undefined', () => {
+    const msg = { id: 'x', en: 'x' };
+    const entries = [
+      { data: { order: 3, name: 'C', message: msg } },
+      { data: { order: 1, name: 'A' } },
+      { data: { order: 2, name: 'B', message: msg } },
+    ] as never[];
+    expect((messageEntry(entries) as { data: { name: string } } | undefined)?.data.name).toBe('B');
+    expect(messageEntry([{ data: { order: 1 } }] as never[])).toBeUndefined();
+  });
+});
+
+describe('business', () => {
+  test('businessLayout: 3–4 lini → featured, selain itu grid', () => {
+    expect([1, 2, 3, 4, 5, 8].map(businessLayout)).toEqual([
+      'grid',
+      'grid',
+      'featured',
+      'featured',
+      'grid',
+      'grid',
+    ]);
+  });
+
+  test('cardImageSpec: lini utama mendapat gambar lebih lebar daripada baris ringkas', () => {
+    const lead = cardImageSpec('featured', 0);
+    const row = cardImageSpec('featured', 1);
+    expect(Math.max(...lead.widths)).toBeGreaterThan(Math.max(...row.widths));
+    expect(cardImageSpec('grid', 0)).toEqual(cardImageSpec('grid', 3));
   });
 });
 

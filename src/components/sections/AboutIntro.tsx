@@ -1,3 +1,5 @@
+import ColumnLines from '../ui/ColumnLines';
+import PhotoFigure, { type PhotoFigureProps } from '../ui/PhotoFigure';
 import Section from '../ui/Section';
 import SectionHeading from '../ui/SectionHeading';
 
@@ -14,15 +16,18 @@ export type AboutIntroProps = {
   lead: string;
   /** Paragraf profil lanjutan. */
   body?: string[];
+  /** Foto lebar di bawah teks profil, dengan keterangan lokasi. */
+  figure?: Pick<PhotoFigureProps, 'image' | 'caption' | 'label'>;
 };
 
-/** Pembuka profil perusahaan: judul besar di kiri, lead + paragraf di kanan. */
+/** Pembuka profil perusahaan: judul besar di kiri, lead + paragraf di kanan, foto lebar di bawah. */
 export default function AboutIntro({
   index,
   eyebrow,
   title,
   lead,
   body = [],
+  figure,
   id,
   titleId = `${id ?? 'about'}-title`,
 }: AboutIntroProps) {
@@ -31,8 +36,10 @@ export default function AboutIntro({
       id={id}
       labelledBy={titleId}
       spacing="none"
+      className="relative isolate overflow-hidden"
       containerClassName="grid gap-12 pt-section pb-section-compact md:pt-section-lg md:pb-section-compact-lg lg:grid-cols-12"
     >
+      <ColumnLines tone="light" />
       <SectionHeading
         id={titleId}
         index={index}
@@ -48,6 +55,7 @@ export default function AboutIntro({
           </p>
         ))}
       </div>
+      {figure && <PhotoFigure {...figure} ratio="panorama" className="lg:col-span-12 lg:mt-8" />}
     </Section>
   );
 }

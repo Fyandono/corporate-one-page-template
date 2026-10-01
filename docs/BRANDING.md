@@ -47,9 +47,29 @@ Juga di blok `@theme` di `global.css` — ubah nilainya, jangan namanya:
 
 Section gelap memakai motif kawung (`src/components/ui/NusantaraPattern.tsx`). Untuk klien dengan motif khas (mis. ornamen daerah atau geometri dari logo), ganti isi `<pattern>` di komponen tersebut; gunakan `stroke="currentColor"` agar warnanya mengikuti token.
 
-## 6. Gambar hero (opsional)
+## 6. Foto
 
-Hero memakai latar grafis (gradien + grid). Untuk memakai foto/video, tambahkan elemen `<img>` (props dari `responsiveImage()` di `src/lib/image.ts`) atau `<video>` di dalam `div[data-parallax]` pada `src/components/sections/Hero.tsx`, pertahankan overlay gradien agar teks tetap terbaca. Video: `muted`, `playsinline`, `poster`, maksimal ±3 MB.
+Template berisi foto contoh Nusantara (kredit di `docs/CONTENT_GUIDE.md`). Ganti dengan foto klien — idealnya foto aset/operasi/wilayah kerja mereka sendiri.
+
+| Foto                                | Diatur di                                                    | File contoh                             |
+| ----------------------------------- | ------------------------------------------------------------ | --------------------------------------- |
+| Latar hero                          | `src/config/media.ts` → `hero`                               | `src/assets/photos/hero.jpg`            |
+| Foto lebar di profil                | `src/config/media.ts` → `about`                              | `src/assets/photos/archipelago.jpg`     |
+| Latar Visi & Misi                   | `src/config/media.ts` → `vision`                             | `src/assets/photos/highlands.jpg`       |
+| Peta titik di belakang angka kunci  | `src/config/media.ts` → `map`                                | `src/assets/graphics/nusantara-map.svg` |
+| Lini bisnis                         | `image` + `imageAlt` di `src/content/business/*.yaml`        | `src/assets/photos/business-*.jpg`      |
+| Section Tata Kelola & Keberlanjutan | `image`, `imageAlt`, `imageCaption` di `src/content/pages/…` | `towers.jpg`, `rice-terraces.jpg`       |
+
+Aturan memilih & memasang foto:
+
+- **Latar hero:** lanskap, lebar ≥ 2400 px, bernuansa gelap/tenang (fajar, senja, kabut), dengan subjek utama di **kanan** — judul berada di kiri-bawah. Efek vignette satu sisi + grain diterapkan otomatis oleh `Backdrop`; jangan menambah teks/logo di dalam foto.
+- **Wajib cek kontras** setelah mengganti foto latar: teks putih di atas foto harus ≥ 4.5:1 (judul besar ≥ 3:1) di lebar 390, 1024, dan 1440 px. Tes otomatis (axe) tidak bisa mengukur kontras di atas gambar. Jika kurang, pilih foto yang lebih gelap di sisi teks, atau pertebal lapisan gelap di utilitas `vignette-left` (`src/styles/global.css`).
+- **Latar Visi & Misi:** foto diredupkan merata (≥ 70%), jadi pilih foto bertekstur (hutan, laut, awan) — detail halus tidak akan terlihat.
+- **Tanpa foto:** hapus entri di `media.ts`; hero dan Visi & Misi kembali ke gradien + motif kawung + grain.
+- **Jangan** memakai foto yang memuat logo/merek pihak lain, atau wajah orang yang bukan insan perusahaan.
+- Keterangan lokasi (`caption`) tampil di samping foto; isi dua bahasa.
+
+Video hero (opsional): ganti `<img>` di `src/components/ui/Backdrop.tsx` dengan `<video>` — `muted`, `playsinline`, `poster`, maksimal ±3 MB, tidak diputar saat reduced-motion.
 
 ## 7. Konten & legal
 

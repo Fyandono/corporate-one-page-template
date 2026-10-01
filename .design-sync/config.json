@@ -77,6 +77,18 @@
     },
     "Eyebrow": {
       "cardMode": "column"
+    },
+    "Backdrop": {
+      "cardMode": "column"
+    },
+    "Grain": {
+      "cardMode": "column"
+    },
+    "PhotoFigure": {
+      "cardMode": "column"
+    },
+    "LeaderMessage": {
+      "cardMode": "column"
     }
   },
   "readmeHeader": ".design-sync/conventions.md"

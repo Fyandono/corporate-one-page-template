@@ -17,6 +17,7 @@ Jalankan `npm run dev` untuk melihat perubahan secara langsung. Jika ada field y
 | Nilai perusahaan                                                            | `src/content/values.yaml`                 |
 | Kebijakan Privasi, Cookie, Syarat; teks section Tata Kelola & Keberlanjutan | `src/content/pages/{id,en}/*.md`          |
 | Berita (3 terbaru tampil di section Berita)                                 | `src/content/news/{id,en}/*.md`           |
+| Foto hero, foto profil, latar Visi & Misi, peta titik                       | `src/config/media.ts`                     |
 
 ## Struktur one-page
 
@@ -56,9 +57,19 @@ photo: ../../assets/management/nama-lengkap.jpg
 
 Foto otomatis dikompres dan dibuat dalam beberapa ukuran (AVIF/WebP) saat build.
 
+### Sambutan pimpinan
+
+Tambahkan `message` (satu–dua kalimat, dua bahasa) pada file orang yang sambutannya ingin ditampilkan, biasanya Direktur Utama. Kutipan tampil besar di atas daftar pengurus, ditutup nama dan jabatan orang tersebut. Jika beberapa orang mengisinya, yang dipakai adalah yang `order`-nya terkecil; jika tidak ada, blok sambutan tidak tampil. Labelnya ("Sambutan Direktur Utama") ada di `management.messageEyebrow` pada `id.json`/`en.json`.
+
+```yaml
+message:
+  id: Amanah kami bukan sekadar mengelola aset negara, …
+  en: Our mandate is not merely to manage state assets, …
+```
+
 ## Menambah lini bisnis
 
-Salin salah satu file di `src/content/business/`, ubah isinya; kartu otomatis muncul di section Bisnis (urut berdasarkan `order`). `imageAlt` wajib diisi: jelaskan isi gambar untuk pengguna pembaca layar.
+Salin salah satu file di `src/content/business/`, ubah isinya; kartu otomatis muncul di section Bisnis (urut berdasarkan `order`). Dengan 3–4 lini, lini ber-`order` terkecil tampil sebagai **lini utama** (foto besar + `summary` + `description`) dan sisanya sebagai baris ringkas di sampingnya; dengan jumlah lain, semua lini tampil sebagai grid kartu sama besar. `imageAlt` wajib diisi: jelaskan isi gambar untuk pengguna pembaca layar.
 
 ## Berita
 
@@ -83,8 +94,39 @@ Isi berita dalam Markdown (disimpan untuk arsip; situs one-page hanya menampilka
 
 Tiga berita terbaru per bahasa tampil sebagai kartu di section Berita. `draft: true` menyembunyikan berita.
 
+## Foto di section teks (Tata Kelola, Keberlanjutan)
+
+Tambahkan di frontmatter `src/content/pages/{id,en}/<slug>.md` (opsional; bila `image` diisi, `imageAlt` wajib):
+
+```markdown
+image: ../../../assets/photos/rice-terraces.jpg
+imageAlt: Sawah terasering dan pohon kelapa di Bali dilihat dari udara
+imageCaption: Ubud, Bali
+```
+
+Foto tampil di bawah judul section dengan rasio 4:5 (desktop) / 3:2 (mobile). Hapus ketiga baris untuk section tanpa foto.
+
 ## Gambar
 
-- Simpan di `src/assets/…` (bukan `public/`) agar dioptimasi otomatis.
-- Gunakan foto berukuran wajar (lebar ≤ 2400 px). Hindari file > 2 MB.
-- Setiap gambar informatif wajib punya teks alternatif.
+- Simpan di `src/assets/…` (bukan `public/`) agar dioptimasi otomatis. Foto di `src/assets/photos/`.
+- Gunakan foto berukuran wajar (lebar ≤ 2400 px; foto latar hero tepat 2400 px). Hindari file > 2 MB.
+- Setiap gambar informatif wajib punya teks alternatif. Foto latar (hero, Visi & Misi) bersifat dekoratif dan tidak memerlukannya.
+- Panduan memilih foto latar dan mengecek kontras: `docs/BRANDING.md` §6.
+
+### Kredit foto contoh
+
+Foto bawaan template berasal dari [Unsplash](https://unsplash.com/license) (lisensi Unsplash: bebas dipakai komersial, atribusi tidak wajib). Ini **foto contoh** — ganti dengan foto milik klien sebelum rilis.
+
+| File (`src/assets/photos/`)   | Isi                                    | Fotografer             | Sumber                          |
+| ----------------------------- | -------------------------------------- | ---------------------- | ------------------------------- |
+| `hero.jpg`                    | Gunung Bromo, Jawa Timur               | Mario La Pergola       | unsplash.com/photos/cn51tm7V0mU |
+| `archipelago.jpg`             | Misool, Raja Ampat                     | Danang Himawan         | unsplash.com/photos/VyPoDS9dzHs |
+| `highlands.jpg`               | Perbukitan berkabut, Yogyakarta        | Iqbal Aditama          | unsplash.com/photos/8-97yne0EFg |
+| `rice-terraces.jpg`           | Sawah terasering, Ubud, Bali           | Geio Tischler          | unsplash.com/photos/SsqqO1COB18 |
+| `towers.jpg`                  | Gedung perkantoran, Jakarta (dipotong) | Bagus Alif Widhiwipati | unsplash.com/photos/Vp0UbeIFhHY |
+| `business-energy.jpg`         | Menara transmisi saat senja            | DM David               | unsplash.com/photos/qAqJuXya6S4 |
+| `business-infrastructure.jpg` | Simpang susun Semanggi, Jakarta        | Rifki Kurniawan        | unsplash.com/photos/3Fjnd2SO5wI |
+| `business-finance.jpg`        | Jakarta pada malam hari                | dapiki moto            | unsplash.com/photos/V7iMLpenocw |
+| `business-digital.jpg`        | Rak server (bukan di Indonesia)        | Taylor Vick            | unsplash.com/photos/M5tzZtFCOfs |
+
+`src/assets/graphics/nusantara-map.svg` dibangkitkan dari geometri Natural Earth 1:50m (public domain); bersifat dekoratif dan tidak menggambarkan batas wilayah secara presisi.

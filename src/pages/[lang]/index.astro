@@ -10,12 +10,13 @@ import StatsBand from '../../components/sections/StatsBand.tsx';
 import Timeline from '../../components/sections/Timeline.tsx';
 import ValuesGrid from '../../components/sections/ValuesGrid.tsx';
 import VisionMission from '../../components/sections/VisionMission.tsx';
-import { sectionHref, sectionIndex } from '../../config/navigation';
+import { sectionIndex } from '../../config/navigation';
 import { site } from '../../config/site';
-import { getLangPaths, getLocale, t } from '../../i18n';
+import { getLangPaths, getLocale } from '../../i18n';
 import { loadAbout } from '../../lib/sections/about';
 import { loadBusiness } from '../../lib/sections/business';
 import { loadContact } from '../../lib/sections/contact';
+import { loadHero } from '../../lib/sections/hero';
 import { loadManagement } from '../../lib/sections/management';
 import { loadNews } from '../../lib/sections/news';
 import { loadProseSections } from '../../lib/sections/prose';
@@ -28,10 +29,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
  */
 export const getStaticPaths = () => getLangPaths();
 const lang = getLocale(Astro.params.lang);
-const dict = t(lang);
-const { home } = dict;
 
-const [about, management, business, proseSections, news, contact] = await Promise.all([
+const [hero, about, management, business, proseSections, news, contact] = await Promise.all([
+  loadHero(lang),
   loadAbout(lang),
   loadManagement(lang),
   loadBusiness(lang),
@@ -42,15 +42,7 @@ const [about, management, business, proseSections, news, contact] = await Promis
 ---
 
 <BaseLayout lang={lang}>
-  <Hero
-    eyebrow={home.heroEyebrow}
-    title={home.heroTitle}
-    lead={home.heroLead}
-    primary={{ label: home.heroPrimary, href: sectionHref(lang, 'about') }}
-    secondary={{ label: home.heroSecondary, href: sectionHref(lang, 'business') }}
-    meta={[`${home.heroEstablished} ${site.foundingYear}`, home.heroLocation]}
-    scrollLabel={dict.common.scrollDown}
-  />
+  <Hero {...hero} />
 
   <div id="about">
     <AboutIntro index={sectionIndex('about')} {...about.intro} />

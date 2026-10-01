@@ -13,7 +13,10 @@ export type ValuesGridProps = {
   values: ValueItem[];
 };
 
-/** Nilai perusahaan (mis. AKHLAK) dalam grid berbatas garis rambut. */
+/**
+ * Nilai perusahaan (mis. AKHLAK) dalam grid berbatas garis rambut. Huruf awal tiap nilai tampil
+ * besar sebagai inisial, sehingga akronimnya terbaca menurun/mendatar.
+ */
 export default function ValuesGrid({
   eyebrow,
   title,
@@ -30,6 +33,12 @@ export default function ValuesGrid({
       >
         {values.map((value) => (
           <li key={value.title} className="bg-white p-8" data-reveal>
+            <p
+              className="mb-8 font-serif text-title-lg font-light text-accent-600"
+              aria-hidden="true"
+            >
+              {value.title.charAt(0)}
+            </p>
             <h3 className="text-title-sm">{value.title}</h3>
             <p className="mt-3 leading-relaxed text-neutral-600">{value.description}</p>
           </li>

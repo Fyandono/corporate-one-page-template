@@ -9,20 +9,37 @@ const photo = (label: string, w = 1200, h = 800) => ({
   height: h,
 });
 
-export const Default = () => (
+const cards = ['Energi', 'Infrastruktur', 'Layanan Keuangan', 'Solusi Digital'].map(
+  (title, index) => ({
+    title,
+    index,
+    summary: 'Ringkasan singkat lini bisnis dalam satu kalimat.',
+    description:
+      'Uraian lebih panjang tentang lini bisnis ini; hanya tampil pada lini utama di tata letak featured.',
+    image: photo(`Foto lini bisnis ${title}`),
+  }),
+);
+
+/** 3–4 lini: lini pertama besar, sisanya baris ringkas. */
+export const Featured = () => (
   <BusinessSection
     id="business"
     index="03"
     eyebrow="Bisnis"
     title="Portofolio yang menopang perekonomian"
     lead="Portofolio usaha yang saling terintegrasi untuk menciptakan nilai bagi negara."
-    cards={['Energi', 'Infrastruktur', 'Layanan Keuangan', 'Solusi Digital'].map(
-      (title, index) => ({
-        title,
-        index,
-        summary: 'Ringkasan singkat lini bisnis dalam satu atau dua kalimat.',
-        image: photo(`Ilustrasi lini bisnis ${title}`),
-      }),
-    )}
+    cards={cards}
+  />
+);
+
+/** Portofolio dengan banyak lini: grid rata. */
+export const Grid = () => (
+  <BusinessSection
+    id="business-grid"
+    index="03"
+    eyebrow="Bisnis"
+    title="Portofolio yang menopang perekonomian"
+    layout="grid"
+    cards={cards}
   />
 );

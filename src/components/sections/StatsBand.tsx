@@ -1,3 +1,4 @@
+import type { ResponsiveImage } from '../types';
 import Container from '../ui/Container';
 import Eyebrow from '../ui/Eyebrow';
 
@@ -15,24 +16,38 @@ export type StatsBandProps = {
   locale: string;
   /** Catatan sumber/periode data, mis. "Data per 31 Desember 2025". */
   note?: string;
+  /** Peta titik wilayah operasi (dekoratif) yang tampil samar di belakang angka. */
+  map?: ResponsiveImage;
 };
 
 /**
  * Angka kunci bergaya laporan tahunan: angka serif sangat besar, kolom dipisah garis rambut,
- * catatan sumber data. Angka berhitung naik lewat `data-counter` (src/scripts/animations.ts).
+ * catatan sumber data, peta titik samar di latar. Angka berhitung naik lewat `data-counter`
+ * (src/scripts/animations.ts).
  */
 export default function StatsBand({
   title,
   stats,
   locale,
   note,
+  map,
   id,
   titleId = `${id ?? 'stats'}-title`,
 }: StatsBandProps) {
   const format = new Intl.NumberFormat(locale);
   return (
     <section id={id} aria-labelledby={titleId} className="bg-white">
-      <Container className="pb-section md:pb-section-lg">
+      <Container className="relative isolate pb-section md:pb-section-lg">
+        {map && (
+          <img
+            {...map}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            decoding="async"
+            className="pointer-events-none absolute top-8 right-0 -z-10 h-auto w-full max-w-5xl map-fade opacity-15 lg:right-8"
+          />
+        )}
         <div className="flex flex-col gap-3 border-t border-primary-900 pt-5 sm:flex-row sm:items-baseline sm:justify-between">
           <Eyebrow as="h2" id={titleId} tone="strong" rule={false}>
             {title}

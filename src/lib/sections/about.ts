@@ -4,8 +4,10 @@ import type { StatsBandProps } from '../../components/sections/StatsBand';
 import type { Milestone, TimelineProps } from '../../components/sections/Timeline';
 import type { ValueItem, ValuesGridProps } from '../../components/sections/ValuesGrid';
 import type { VisionMissionProps } from '../../components/sections/VisionMission';
+import { media, type Photo } from '../../config/media';
 import { site } from '../../config/site';
 import { localize, t, type Locale, type LocalizedString } from '../../i18n';
+import { backdropImage, responsiveImage } from '../image';
 import { byOrder, type SectionData } from './shared';
 
 type SiteStat = { value: number; suffix?: LocalizedString; label: LocalizedString };
@@ -41,6 +43,25 @@ export function mapMilestones(
     }));
 }
 
+/** Teks foto (keterangan & alt) dalam satu bahasa; alt jatuh ke keterangan bila tidak diisi. */
+export function photoText(photo: Pick<Photo, 'caption' | 'alt'>, lang: Locale) {
+  const caption = photo.caption && localize(photo.caption, lang);
+  return { caption, alt: photo.alt ? localize(photo.alt, lang) : (caption ?? '') };
+}
+
+async function loadFigure(photo: Photo, lang: Locale): Promise<AboutIntroProps['figure']> {
+  const { caption, alt } = photoText(photo, lang);
+  return {
+    image: await responsiveImage(
+      photo.image,
+      alt,
+      '(min-width: 1280px) 1216px, 100vw',
+      [640, 960, 1280, 1920, 2400],
+    ),
+    caption,
+  };
+}
+
 /** Semua props untuk rangkaian section "Tentang Kami". */
 export async function loadAbout(lang: Locale) {
   const dict = t(lang);
@@ -51,18 +72,21 @@ export async function loadAbout(lang: Locale) {
       title: about.title,
       lead: about.lead,
       body: about.body,
+      figure: media.about && (await loadFigure(media.about, lang)),
     } satisfies SectionData<AboutIntroProps>,
     stats: {
       title: home.statsTitle,
       note: home.statsNote,
       stats: mapStats(site.stats, lang),
       locale: lang,
+      map: media.map && (await responsiveImage(media.map.image, '', '100vw')),
     } satisfies SectionData<StatsBandProps>,
     visionMission: {
       visionTitle: about.visionTitle,
       vision: about.vision,
       missionTitle: about.missionTitle,
       mission: about.mission,
+      image: media.vision && (await backdropImage(media.vision.image)),
     } satisfies SectionData<VisionMissionProps>,
     values: {
       eyebrow: about.valuesEyebrow,

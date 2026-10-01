@@ -1,9 +1,11 @@
 ---
 /**
- * Section teks Markdown (mis. Tata Kelola, Keberlanjutan): judul lengket di kiri, isi di kanan.
+ * Section teks Markdown (mis. Tata Kelola, Keberlanjutan): judul (+ foto opsional) lengket di kiri,
+ * isi di kanan.
  * Dipertahankan sebagai .astro karena isinya `<Content />` dari render Markdown (slot Astro).
  * Subjudul di Markdown memakai `###` karena judul section sudah `<h2>`.
  */
+import PhotoFigure, { type PhotoFigureProps } from '../ui/PhotoFigure.tsx';
 import Section from '../ui/Section.astro';
 import SectionHeading from '../ui/SectionHeading.tsx';
 import type { SectionTone } from '../ui/Section.tsx';
@@ -15,20 +17,18 @@ type Props = {
   title: string;
   lead?: string;
   tone?: SectionTone;
+  /** Foto di bawah judul (dari frontmatter `image` halaman). */
+  figure?: Pick<PhotoFigureProps, 'image' | 'caption'>;
 };
-const { id, index, eyebrow, title, lead, tone } = Astro.props;
+const { id, index, eyebrow, title, lead, tone, figure } = Astro.props;
 const titleId = `${id}-title`;
 ---
 
 <Section id={id} labelledBy={titleId} tone={tone} containerClass="grid gap-12 lg:grid-cols-12">
-  <SectionHeading
-    id={titleId}
-    index={index}
-    eyebrow={eyebrow}
-    title={title}
-    lead={lead}
-    className="lg:sticky lg:top-28 lg:col-span-5 lg:self-start"
-  />
+  <div class:list={['lg:col-span-5 lg:self-start', !figure && 'lg:sticky lg:top-28']}>
+    <SectionHeading id={titleId} index={index} eyebrow={eyebrow} title={title} lead={lead} />
+    {figure && <PhotoFigure {...figure} ratio="card" className="mt-12 lg:max-w-sm" />}
+  </div>
   <div class="prose-content lg:col-span-6 lg:col-start-7" data-reveal>
     <slot />
   </div>

@@ -2,6 +2,7 @@ import Eyebrow from '../ui/Eyebrow';
 import PersonCard, { type PersonCardProps } from '../ui/PersonCard';
 import Section from '../ui/Section';
 import SectionHeading from '../ui/SectionHeading';
+import LeaderMessage, { type LeaderMessageProps } from './LeaderMessage';
 
 export type ManagementGroup = {
   /** Nama kelompok, mis. "Dewan Komisaris". */
@@ -19,9 +20,11 @@ export type ManagementSectionProps = {
   title: string;
   groups: ManagementGroup[];
   viewProfileLabel: string;
+  /** Sambutan pimpinan (kutipan besar) di antara judul dan daftar pengurus. */
+  message?: Omit<LeaderMessageProps, 'className'>;
 };
 
-/** Dewan Komisaris & Direksi, dikelompokkan dengan label bergaris. */
+/** Sambutan pimpinan, lalu Dewan Komisaris & Direksi yang dikelompokkan dengan label bergaris. */
 export default function ManagementSection({
   id,
   titleId = `${id ?? 'management'}-title`,
@@ -30,12 +33,16 @@ export default function ManagementSection({
   title,
   groups,
   viewProfileLabel,
+  message,
 }: ManagementSectionProps) {
   return (
     <Section id={id} labelledBy={titleId}>
       <SectionHeading id={titleId} index={index} eyebrow={eyebrow} title={title} />
+      {message && (
+        <LeaderMessage {...message} className="mt-16 border-t border-primary-900 pt-10 md:mt-20" />
+      )}
       {groups.map((group) => (
-        <div key={group.title} className="mt-16">
+        <div key={group.title} className="mt-16 md:mt-20">
           <Eyebrow as="h3" tone="strong" rule={false} className="border-t border-primary-900 pt-5">
             {group.title}
           </Eyebrow>

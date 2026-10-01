@@ -1,4 +1,9 @@
+import type { ResponsiveImage } from '../types';
+import Backdrop from '../ui/Backdrop';
+import ColumnLines from '../ui/ColumnLines';
 import Eyebrow from '../ui/Eyebrow';
+import Grain from '../ui/Grain';
+import NusantaraPattern from '../ui/NusantaraPattern';
 import Section from '../ui/Section';
 
 export type VisionMissionProps = {
@@ -10,14 +15,20 @@ export type VisionMissionProps = {
   vision: string;
   missionTitle: string;
   mission: string[];
+  /** Foto latar (dekoratif). Tanpa foto, section memakai motif kawung + grain. */
+  image?: ResponsiveImage;
 };
 
-/** Section gelap: pernyataan visi besar di kiri, daftar misi bernomor di kanan. */
+/**
+ * Section gelap sinematik: pernyataan visi besar di kiri, daftar misi bernomor di kanan,
+ * di atas foto latar ber-vignette (atau motif kawung), garis kolom, dan grain.
+ */
 export default function VisionMission({
   visionTitle,
   vision,
   missionTitle,
   mission,
+  image,
   id,
   titleId = `${id ?? 'vision'}-title`,
 }: VisionMissionProps) {
@@ -27,13 +38,25 @@ export default function VisionMission({
       spacing="compact"
       id={id}
       labelledBy={titleId}
+      className="relative isolate overflow-hidden"
       containerClassName="grid gap-16 lg:grid-cols-2"
     >
+      {image ? (
+        <Backdrop image={image} vignette="center" />
+      ) : (
+        <>
+          <NusantaraPattern fade="left" />
+          <Grain />
+        </>
+      )}
+      <ColumnLines />
       <div data-reveal>
         <Eyebrow as="h2" id={titleId} tone="dark">
           {visionTitle}
         </Eyebrow>
-        <p className="mt-6 text-statement font-medium text-white">{vision}</p>
+        <p className="mt-6 font-serif text-statement font-light text-balance text-white">
+          {vision}
+        </p>
       </div>
       <div data-reveal>
         <Eyebrow as="h2" tone="dark">

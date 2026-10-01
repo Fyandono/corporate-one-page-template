@@ -23,6 +23,14 @@ export const Default = () => (
     eyebrow="Manajemen"
     title="Dipimpin oleh jajaran profesional yang berpengalaman"
     viewProfileLabel="Lihat profil"
+    message={{
+      eyebrow: 'Sambutan Direktur Utama',
+      quote:
+        'Amanah kami bukan sekadar mengelola aset negara, melainkan memastikan setiap rupiah yang dipercayakan kembali kepada masyarakat sebagai layanan yang lebih baik.',
+      name: 'Nama Direktur Utama',
+      position: 'Direktur Utama',
+      photo: photo('Nama Direktur Utama', 600, 800),
+    }}
     groups={[
       {
         title: 'Dewan Komisaris',

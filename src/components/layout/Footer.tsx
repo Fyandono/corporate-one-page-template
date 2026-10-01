@@ -1,5 +1,7 @@
 import Container from '../ui/Container';
+import Grain from '../ui/Grain';
 import Logo from '../ui/Logo';
+import NusantaraPattern from '../ui/NusantaraPattern';
 
 type Link = { label: string; href: string };
 
@@ -30,7 +32,9 @@ export type FooterProps = {
 
 export default function Footer(props: FooterProps) {
   return (
-    <footer className="bg-primary-950 text-primary-100">
+    <footer className="relative isolate overflow-hidden bg-primary-950 text-primary-100">
+      <NusantaraPattern fade="left" />
+      <Grain />
       <Container className="grid gap-12 py-16 md:grid-cols-12 lg:py-20">
         <div className="md:col-span-5">
           <a href={props.homeHref} className="inline-block text-white" aria-label={props.homeLabel}>
